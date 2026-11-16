@@ -142,7 +142,7 @@ class App(ctk.CTk):
             return
         path = filedialog.asksaveasfilename(
             defaultextension=".docx",
-            filetypes=[("Word", "*.docx"),("Текстовий файл", "*.txt")]
+            filetypes=[("Word", "*.docx")]
         )
         if not path:
             return
@@ -157,7 +157,7 @@ class App(ctk.CTk):
             return
         path = filedialog.asksaveasfilename(
             defaultextension=".txt",
-            filetypes=[("Текстовий файл", "*.txt"), ("Word", "*.docx")]
+            filetypes=[("Текстовий файл", "*.txt")]
         )
         if not path:
             return
@@ -177,13 +177,17 @@ class App(ctk.CTk):
         con.execute("CREATE TABLE if not exists history (path TEXT,mode TEXT,text TEXT,time TEXT)")
         path = Path(self.file_path)
         is_path_drawing = path.name == "drawing.png"
-        if is_path_drawing:
-            self.history_dir_path.mkdir(exist_ok=True)
-            if list(path.glob("*.png")):
-                i = 0
-            else:
-                i = int(list(self.history_dir_path.iterdir())[-1].name.rstrip(".png").lstrip("drawing"))
-                i += 1
+        self.history_dir_path.mkdir(exist_ok=True)
+        if len(list(self.history_dir_path.iterdir())) != 0:
+            if is_path_drawing:
+                if list(path.glob("*.png")):
+                    i = 0
+                else:
+                    i = int(list(self.history_dir_path.iterdir())[-1].name.rstrip(".png").lstrip("drawing"))
+                    i += 1
+        else:
+
+            i = 0
 
             new_path = self.history_dir_path / f"drawing{i}.png"
             shutil.copy2(path, new_path)
