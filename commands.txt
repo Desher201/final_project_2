@@ -1,2 +1,5 @@
 pip install transformers
 pip install pillow
+pip install easyocr
+pip uninstall python-docx
+pip install customtkinter
